@@ -8,1091 +8,772 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --bg: #0a0f1e;
-    --bg2: #0f1628;
-    --bg3: #151d35;
-    --accent: #00c8ff;
-    --accent2: #0066ff;
-    --green: #00e5a0;
-    --text: #e8eaf6;
-    --muted: #8892b0;
-    --border: rgba(0,200,255,0.15);
-    --card: rgba(21,29,53,0.8);
-  }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: 'Sora', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.6;
-    overflow-x: hidden;
-  }
-
-  /* ANIMATED GRID BACKGROUND */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(0,200,255,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,200,255,0.04) 1px, transparent 1px);
-    background-size: 60px 60px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  /* GLOW ORBS */
-  .orb {
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(80px);
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.35;
-  }
-  .orb1 { width: 500px; height: 500px; background: radial-gradient(circle, #0066ff, transparent 70%); top: -200px; left: -150px; }
-  .orb2 { width: 400px; height: 400px; background: radial-gradient(circle, #00c8ff, transparent 70%); bottom: 200px; right: -100px; }
-  .orb3 { width: 300px; height: 300px; background: radial-gradient(circle, #00e5a0, transparent 70%); top: 50%; left: 50%; transform: translate(-50%,-50%); }
-
-  /* NAV */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 5%;
-    background: rgba(10,15,30,0.85);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .nav-logo {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: var(--text);
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .nav-logo span {
-    color: var(--accent);
-    font-family: 'DM Mono', monospace;
-    font-size: 1.1rem;
-  }
-
-  .nav-logo .dot {
-    width: 8px; height: 8px;
-    background: var(--accent);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(0,200,255,0.4); }
-    50% { opacity: 0.8; transform: scale(1.1); box-shadow: 0 0 0 6px rgba(0,200,255,0); }
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 2rem;
-    list-style: none;
-  }
-
-  .nav-links a {
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 400;
-    transition: color 0.2s;
-    letter-spacing: 0.03em;
-  }
-
-  .nav-links a:hover { color: var(--accent); }
-
-  .nav-cta {
-    background: linear-gradient(135deg, var(--accent2), var(--accent));
-    color: #fff !important;
-    padding: 0.5rem 1.25rem;
-    border-radius: 6px;
-    font-weight: 600 !important;
-  }
-
-  /* HERO */
-  .hero {
-    position: relative;
-    z-index: 1;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 8rem 5% 6rem;
-  }
-
-  .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(0,200,255,0.08);
-    border: 1px solid rgba(0,200,255,0.3);
-    color: var(--accent);
-    font-family: 'DM Mono', monospace;
-    font-size: 0.78rem;
-    padding: 0.4rem 1rem;
-    border-radius: 100px;
-    margin-bottom: 2rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    animation: fadeDown 0.8s ease both;
-  }
-
-  @keyframes fadeDown {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .hero h1 {
-    font-size: clamp(2.8rem, 6vw, 5rem);
-    font-weight: 700;
-    line-height: 1.1;
-    margin-bottom: 1.5rem;
-    animation: fadeUp 0.8s 0.2s ease both;
-  }
-
-  .hero h1 .highlight {
-    background: linear-gradient(135deg, var(--accent), var(--green));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .hero p {
-    font-size: 1.15rem;
-    color: var(--muted);
-    max-width: 600px;
-    margin: 0 auto 2.5rem;
-    font-weight: 300;
-    animation: fadeUp 0.8s 0.4s ease both;
-  }
-
-  .hero-actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
-    animation: fadeUp 0.8s 0.6s ease both;
-  }
-
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: linear-gradient(135deg, var(--accent2), var(--accent));
-    color: #fff;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.95rem;
-    padding: 0.8rem 2rem;
-    border-radius: 8px;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 4px 24px rgba(0,102,255,0.4);
-  }
-
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 32px rgba(0,200,255,0.4);
-  }
-
-  .btn-outline {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: transparent;
-    color: var(--text);
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.95rem;
-    padding: 0.8rem 2rem;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    transition: border-color 0.2s, background 0.2s;
-  }
-
-  .btn-outline:hover {
-    border-color: var(--accent);
-    background: rgba(0,200,255,0.06);
-  }
-
-  /* STATS */
-  .stats {
-    position: relative; z-index: 1;
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
-    flex-wrap: wrap;
-    padding: 3rem 5%;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    background: rgba(10,15,30,0.6);
-  }
-
-  .stat {
-    text-align: center;
-    animation: fadeUp 0.8s ease both;
-  }
-
-  .stat-number {
-    font-size: 2.2rem;
-    font-weight: 700;
-    color: var(--accent);
-    font-family: 'DM Mono', monospace;
-    display: block;
-  }
-
-  .stat-label {
-    font-size: 0.85rem;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  /* SECTIONS */
-  section { position: relative; z-index: 1; }
-
-  .section-header {
-    text-align: center;
-    margin-bottom: 3.5rem;
-  }
-
-  .section-tag {
-    display: inline-block;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--accent);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    margin-bottom: 0.75rem;
-  }
-
-  .section-header h2 {
-    font-size: clamp(1.8rem, 3vw, 2.5rem);
-    font-weight: 700;
-    margin-bottom: 1rem;
-  }
-
-  .section-header p {
-    color: var(--muted);
-    font-size: 1rem;
-    max-width: 520px;
-    margin: 0 auto;
-    font-weight: 300;
-  }
-
-  /* SERVICES */
-  .services {
-    padding: 6rem 5%;
-  }
-
-  .services-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.25rem;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .service-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.75rem;
-    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
-    backdrop-filter: blur(8px);
-  }
-
-  .service-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(0,200,255,0.4);
-    box-shadow: 0 8px 32px rgba(0,200,255,0.1);
-  }
-
-  .service-icon {
-    width: 48px; height: 48px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1.25rem;
-    font-size: 1.5rem;
-  }
-
-  .service-card h3 {
-    font-size: 1.05rem;
-    font-weight: 600;
-    margin-bottom: 0.6rem;
-    color: var(--text);
-  }
-
-  .service-card p {
-    font-size: 0.875rem;
-    color: var(--muted);
-    font-weight: 300;
-    line-height: 1.65;
-  }
-
-  /* MEDICAL HIGHLIGHT */
-  .medical {
-    padding: 5rem 5%;
-    background: linear-gradient(180deg, transparent, rgba(0,102,255,0.05), transparent);
-  }
-
-  .medical-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    align-items: center;
-  }
-
-  .medical-visual {
-    position: relative;
-  }
-
-  .medical-badge-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
-
-  .med-badge {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 1.25rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    transition: border-color 0.3s;
-  }
-
-  .med-badge:hover { border-color: var(--green); }
-
-  .med-badge-icon { font-size: 1.8rem; }
-
-  .med-badge-name {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text);
-  }
-
-  .med-badge-sub {
-    font-size: 0.75rem;
-    color: var(--muted);
-    font-family: 'DM Mono', monospace;
-  }
-
-  .medical-content h2 {
-    font-size: clamp(1.8rem, 3vw, 2.4rem);
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 1.25rem;
-  }
-
-  .medical-content h2 .highlight {
-    background: linear-gradient(135deg, var(--green), var(--accent));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .medical-content p {
-    color: var(--muted);
-    font-size: 0.95rem;
-    font-weight: 300;
-    margin-bottom: 2rem;
-    line-height: 1.7;
-  }
-
-  .feature-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .feature-list li {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.9rem;
-    color: var(--text);
-  }
-
-  .feature-list li::before {
-    content: '';
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--green);
-    flex-shrink: 0;
-  }
-
-  /* WHY US */
-  .why {
-    padding: 6rem 5%;
-  }
-
-  .why-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.5rem;
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-
-  .why-card {
-    text-align: center;
-    padding: 2rem 1.5rem;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    transition: transform 0.3s;
-  }
-
-  .why-card:hover { transform: translateY(-4px); }
-
-  .why-number {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--accent);
-    display: block;
-    margin-bottom: 1rem;
-    letter-spacing: 0.1em;
-  }
-
-  .why-card h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.6rem;
-  }
-
-  .why-card p {
-    font-size: 0.85rem;
-    color: var(--muted);
-    font-weight: 300;
-  }
-
-  /* CONTACT */
-  .contact {
-    padding: 6rem 5%;
-    background: linear-gradient(180deg, transparent, rgba(0,200,255,0.04));
-  }
-
-  .contact-inner {
-    max-width: 700px;
-    margin: 0 auto;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 3rem;
-    text-align: center;
-    backdrop-filter: blur(12px);
-  }
-
-  .contact-inner h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 0.75rem;
-  }
-
-  .contact-inner p {
-    color: var(--muted);
-    font-size: 0.95rem;
-    margin-bottom: 2.5rem;
-    font-weight: 300;
-  }
-
-  .contact-options {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 2.5rem;
-  }
-
-  .contact-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 0.9rem 1.75rem;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-
-  .contact-link.whatsapp {
-    background: linear-gradient(135deg, #128C7E, #25D366);
-    color: #fff;
-    box-shadow: 0 4px 20px rgba(37,211,102,0.3);
-  }
-
-  .contact-link.whatsapp:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 28px rgba(37,211,102,0.45);
-  }
-
-  .contact-link.email {
-    background: transparent;
-    color: var(--text);
-    border: 1px solid var(--border);
-  }
-
-  .contact-link.email:hover {
-    border-color: var(--accent);
-    background: rgba(0,200,255,0.06);
-    transform: translateY(-2px);
-  }
-
-  .contact-info {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    flex-wrap: wrap;
-  }
-
-  .contact-info-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.85rem;
-    color: var(--muted);
-  }
-
-  .contact-info-item .dot { background: var(--green); }
-
-  /* ABOUT */
-  .about {
-    padding: 6rem 5%;
-    background: linear-gradient(180deg, transparent, rgba(0,229,160,0.04), transparent);
-  }
-
-  .about-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 5rem;
-    align-items: start;
-  }
-
-  .about-content h2 {
-    font-size: clamp(1.8rem, 3vw, 2.4rem);
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 1.25rem;
-  }
-
-  .about-lead {
-    font-size: 1.05rem;
-    color: var(--text);
-    font-weight: 400;
-    line-height: 1.7;
-    margin-bottom: 1rem;
-  }
-
-  .about-body {
-    font-size: 0.9rem;
-    color: var(--muted);
-    font-weight: 300;
-    line-height: 1.75;
-    margin-bottom: 1rem;
-  }
-
-  .about-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 1.75rem;
-  }
-
-  .tag {
-    background: rgba(0,229,160,0.08);
-    border: 1px solid rgba(0,229,160,0.25);
-    color: var(--green);
-    font-size: 0.78rem;
-    padding: 0.35rem 0.85rem;
-    border-radius: 100px;
-    font-family: 'DM Mono', monospace;
-    letter-spacing: 0.03em;
-  }
-
-  .about-timeline {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    position: relative;
-  }
-
-  .about-timeline::before {
-    content: '';
-    position: absolute;
-    left: 10px;
-    top: 12px;
-    bottom: 12px;
-    width: 1px;
-    background: linear-gradient(180deg, var(--accent), var(--green));
-    opacity: 0.3;
-  }
-
-  .timeline-item {
-    display: flex;
-    gap: 1.5rem;
-    padding-bottom: 2rem;
-    position: relative;
-  }
-
-  .timeline-dot {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    border: 2px solid rgba(0,200,255,0.4);
-    background: var(--bg);
-    flex-shrink: 0;
-    margin-top: 2px;
-    position: relative;
-    z-index: 1;
-    transition: border-color 0.3s;
-  }
-
-  .timeline-item.active .timeline-dot {
-    border-color: var(--green);
-    background: rgba(0,229,160,0.15);
-    box-shadow: 0 0 12px rgba(0,229,160,0.3);
-  }
-
-  .timeline-year {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    color: var(--accent);
-    display: block;
-    margin-bottom: 0.3rem;
-    letter-spacing: 0.05em;
-  }
-
-  .timeline-item.active .timeline-year { color: var(--green); }
-
-  .timeline-content h4 {
-    font-size: 0.95rem;
-    font-weight: 600;
-    margin-bottom: 0.4rem;
-    color: var(--text);
-  }
-
-  .timeline-content p {
-    font-size: 0.82rem;
-    color: var(--muted);
-    font-weight: 300;
-    line-height: 1.65;
-  }
-
-  @media (max-width: 768px) {
-    .about-inner { grid-template-columns: 1fr; gap: 3rem; }
-  }
-
-  /* FOOTER */
-  footer {
-    position: relative; z-index: 1;
-    padding: 2rem 5%;
-    border-top: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: gap;
-    gap: 1rem;
-    background: rgba(10,15,30,0.6);
-  }
-
-  .footer-logo {
-    font-weight: 700;
-    font-size: 1rem;
-    color: var(--text);
-  }
-
-  .footer-logo span { color: var(--accent); }
-
-  footer p {
-    font-size: 0.8rem;
-    color: var(--muted);
-  }
-
-  .footer-links {
-    display: flex;
-    gap: 1.5rem;
-    list-style: none;
-  }
-
-  .footer-links a {
-    font-size: 0.8rem;
-    color: var(--muted);
-    text-decoration: none;
-  }
-
-  .footer-links a:hover { color: var(--accent); }
-
-  /* MOBILE */
-  @media (max-width: 768px) {
-    .nav-links { display: none; }
-    .medical-inner { grid-template-columns: 1fr; gap: 2rem; }
-    .medical-visual { order: -1; }
-    .stats { gap: 1.5rem; }
-    .contact-inner { padding: 2rem 1.5rem; }
-    footer { flex-direction: column; text-align: center; }
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0a0f1e;
+  --bg2: #0f1628;
+  --bg3: #151d35;
+  --accent: #00c8ff;
+  --accent2: #0066ff;
+  --green: #00e5a0;
+  --text: #e8eaf6;
+  --muted: #8892b0;
+  --border: rgba(0,200,255,0.15);
+  --card: rgba(21,29,53,0.8);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Sora', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,200,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,200,255,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.3;
+}
+.orb1 { width: 500px; height: 500px; background: radial-gradient(circle, #0066ff, transparent 70%); top: -200px; left: -150px; }
+.orb2 { width: 400px; height: 400px; background: radial-gradient(circle, #00e5a0, transparent 70%); bottom: 100px; right: -100px; }
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 5%;
+  background: rgba(10,15,30,0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-logo span { color: var(--accent); font-family: 'DM Mono', monospace; }
+
+.dot-pulse {
+  width: 8px; height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0,200,255,0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(0,200,255,0); }
+}
+
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.88rem;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--accent); }
+.nav-cta {
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  color: #fff !important;
+  padding: 0.45rem 1.1rem;
+  border-radius: 6px;
+  font-weight: 600 !important;
+}
+
+/* HERO */
+.hero {
+  position: relative; z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 7rem 5% 4rem;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0,200,255,0.08);
+  border: 1px solid rgba(0,200,255,0.3);
+  color: var(--accent);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  padding: 0.4rem 1rem;
+  border-radius: 100px;
+  margin-bottom: 2rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  animation: fadeDown 0.8s ease both;
+}
+
+@keyframes fadeDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+
+.hero h1 {
+  font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 1.25rem;
+  animation: fadeUp 0.8s 0.2s ease both;
+}
+
+.hero h1 .hl-blue {
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+.hero p {
+  font-size: 1.05rem;
+  color: var(--muted);
+  max-width: 520px;
+  margin: 0 auto 3.5rem;
+  font-weight: 300;
+  animation: fadeUp 0.8s 0.4s ease both;
+}
+
+/* SPLIT CARDS */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  max-width: 900px;
+  width: 100%;
+  animation: fadeUp 0.8s 0.6s ease both;
+}
+
+.split-card {
+  position: relative;
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  text-decoration: none;
+  border: 1px solid transparent;
+  overflow: hidden;
+  transition: transform 0.35s, box-shadow 0.35s;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.split-card:hover {
+  transform: translateY(-6px);
+}
+
+.split-card.it {
+  background: linear-gradient(145deg, rgba(0,102,255,0.12), rgba(0,200,255,0.06));
+  border-color: rgba(0,200,255,0.25);
+}
+
+.split-card.it:hover {
+  box-shadow: 0 12px 48px rgba(0,102,255,0.3);
+  border-color: rgba(0,200,255,0.5);
+}
+
+.split-card.med {
+  background: linear-gradient(145deg, rgba(0,229,160,0.12), rgba(0,200,255,0.04));
+  border-color: rgba(0,229,160,0.25);
+}
+
+.split-card.med:hover {
+  box-shadow: 0 12px 48px rgba(0,229,160,0.25);
+  border-color: rgba(0,229,160,0.5);
+}
+
+.card-icon {
+  font-size: 2.8rem;
+  line-height: 1;
+}
+
+.card-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.8rem;
+  border-radius: 100px;
+}
+
+.split-card.it .card-tag {
+  background: rgba(0,200,255,0.12);
+  color: var(--accent);
+  border: 1px solid rgba(0,200,255,0.3);
+}
+
+.split-card.med .card-tag {
+  background: rgba(0,229,160,0.12);
+  color: var(--green);
+  border: 1px solid rgba(0,229,160,0.3);
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.card-desc {
+  font-size: 0.875rem;
+  color: var(--muted);
+  font-weight: 300;
+  line-height: 1.65;
+  text-align: left;
+}
+
+.card-services {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+}
+
+.svc-pill {
+  font-size: 0.72rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 100px;
+  font-weight: 400;
+}
+
+.split-card.it .svc-pill {
+  background: rgba(0,102,255,0.15);
+  color: #7ab8ff;
+}
+
+.split-card.med .svc-pill {
+  background: rgba(0,229,160,0.12);
+  color: #5af0c4;
+}
+
+.card-cta {
+  margin-top: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.split-card.it .card-cta { color: var(--accent); }
+.split-card.med .card-cta { color: var(--green); }
+
+.card-cta .arrow {
+  transition: transform 0.2s;
+}
+
+.split-card:hover .card-cta .arrow { transform: translateX(4px); }
+
+/* PAGES (hidden by default) */
+.page {
+  display: none;
+  position: relative;
+  z-index: 1;
+  animation: fadeUp 0.5s ease both;
+}
+
+.page.active { display: block; }
+
+/* BACK BUTTON */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: 'Sora', sans-serif;
+  font-size: 0.875rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  margin-bottom: 2.5rem;
+}
+
+.back-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+/* SECTION STYLES */
+.page-hero {
+  padding: 8rem 5% 4rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.page-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: 100px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.page-badge.it {
+  background: rgba(0,200,255,0.08);
+  border: 1px solid rgba(0,200,255,0.3);
+  color: var(--accent);
+}
+
+.page-badge.med {
+  background: rgba(0,229,160,0.08);
+  border: 1px solid rgba(0,229,160,0.3);
+  color: var(--green);
+}
+
+.page-hero h1 {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+}
+
+.hl-green {
+  background: linear-gradient(135deg, var(--green), var(--accent));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+.page-hero p {
+  font-size: 1rem;
+  color: var(--muted);
+  font-weight: 300;
+  max-width: 580px;
+  margin-bottom: 2rem;
+}
+
+/* SERVICES GRID */
+.services-section {
+  padding: 2rem 5% 5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+.section-label.it { color: var(--accent); }
+.section-label.med { color: var(--green); }
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.1rem;
+}
+
+.svc-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.6rem;
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.svc-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s, box-shadow 0.3s;
+}
+
+.svc-card:hover { transform: translateY(-4px); }
+
+.svc-card.it:hover { border-color: rgba(0,200,255,0.4); box-shadow: 0 8px 28px rgba(0,200,255,0.1); }
+.svc-card.med:hover { border-color: rgba(0,229,160,0.4); box-shadow: 0 8px 28px rgba(0,229,160,0.1); }
+
+.svc-icon {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.svc-card h3 {
+  font-size: 0.975rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.svc-card p {
+  font-size: 0.845rem;
+  color: var(--muted);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+/* ABOUT STRIP */
+.about-strip {
+  padding: 4rem 5%;
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  gap: 3rem;
+  align-items: center;
+  border-top: 1px solid var(--border);
+}
+
+.about-strip-text h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.about-strip-text p {
+  font-size: 0.9rem;
+  color: var(--muted);
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.about-strip-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1rem;
+}
+
+.about-strip-tags .tag {
+  background: rgba(0,229,160,0.08);
+  border: 1px solid rgba(0,229,160,0.2);
+  color: var(--green);
+  font-size: 0.75rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 100px;
+  font-family: 'DM Mono', monospace;
+}
+
+/* CONTACT */
+.contact-section {
+  padding: 4rem 5% 6rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.contact-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2.5rem;
+  text-align: center;
+  backdrop-filter: blur(12px);
+}
+
+.contact-box h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.6rem; }
+.contact-box p { color: var(--muted); font-size: 0.9rem; font-weight: 300; margin-bottom: 2rem; }
+
+.contact-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+.btn-wa {
+  display: inline-flex; align-items: center; gap: 9px;
+  background: linear-gradient(135deg, #128C7E, #25D366);
+  color: #fff; text-decoration: none;
+  font-weight: 600; font-size: 0.9rem;
+  padding: 0.8rem 1.75rem; border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(37,211,102,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-wa:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,211,102,0.45); }
+
+.btn-email {
+  display: inline-flex; align-items: center; gap: 9px;
+  background: transparent; color: var(--text); text-decoration: none;
+  font-weight: 500; font-size: 0.9rem;
+  padding: 0.8rem 1.75rem; border-radius: 10px;
+  border: 1px solid var(--border);
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+}
+.btn-email:hover { border-color: var(--accent); background: rgba(0,200,255,0.06); transform: translateY(-2px); }
+
+/* STATS */
+.stats-row {
+  display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;
+  padding: 2.5rem 5%;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: rgba(10,15,30,0.5);
+  margin-bottom: 1rem;
+}
+
+.stat { text-align: center; }
+.stat-n { font-size: 2rem; font-weight: 700; font-family: 'DM Mono', monospace; color: var(--accent); display: block; }
+.stat-l { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* FOOTER */
+footer {
+  position: relative; z-index: 1;
+  padding: 1.75rem 5%;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+  background: rgba(10,15,30,0.6);
+}
+
+.footer-logo { font-weight: 700; font-size: 0.95rem; }
+.footer-logo span { color: var(--accent); }
+footer p { font-size: 0.78rem; color: var(--muted); }
+
+@media (max-width: 700px) {
+  .split { grid-template-columns: 1fr; }
+  .about-strip { flex-direction: column; gap: 1.5rem; }
+  nav .nav-links { display: none; }
+  footer { flex-direction: column; text-align: center; }
+}
 </style>
 </head>
 <body>
 
 <div class="orb orb1"></div>
 <div class="orb orb2"></div>
-<div class="orb orb3"></div>
 
-<!-- NAVIGATION -->
+<!-- NAV -->
 <nav>
-  <a href="#inicio" class="nav-logo">
-    <div class="dot"></div>
+  <a href="#" class="nav-logo" onclick="showHome(); return false;">
+    <div class="dot-pulse"></div>
     <span>fermadi</span> Soluciones
   </a>
   <ul class="nav-links">
-    <li><a href="#servicios">Servicios</a></li>
-    <li><a href="#medico">Equipos Médicos</a></li>
-    <li><a href="#nosotros-about">Quiénes somos</a></li>
-    <li><a href="#nosotros">¿Por qué nosotros?</a></li>
-    <li><a href="#contacto" class="nav-cta">Contactar</a></li>
+    <li><a href="#" onclick="showPage('it'); return false;">Informática</a></li>
+    <li><a href="#" onclick="showPage('med'); return false;">Equipos Médicos</a></li>
+    <li><a href="#contacto-it" onclick="showPage('it'); setTimeout(()=>document.getElementById('contacto-it').scrollIntoView({behavior:'smooth'}),300); return false;" class="nav-cta">Contactar</a></li>
   </ul>
 </nav>
 
-<!-- HERO -->
-<section class="hero" id="inicio">
-  <div class="hero-badge">
-    <div class="dot" style="width:6px;height:6px;background:var(--accent);border-radius:50%;"></div>
-    Asunción, Paraguay — Servicio Técnico Especializado
-  </div>
-  <h1>Tecnología & Equipos<br><span class="highlight">Médicos al Siguiente Nivel</span></h1>
-  <p>Reparación de servidores, redes estructuradas, CCTV y mantenimiento de equipos de diagnóstico médico. Soluciones integrales para empresas, clínicas y veterinarias.</p>
-  <div class="hero-actions">
-    <a href="https://wa.me/595994158411?text=Hola%20Fermadi%2C%20necesito%20asistencia%20técnica" class="btn-primary" target="_blank">
-      <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      WhatsApp
-    </a>
-    <a href="#servicios" class="btn-outline">Ver servicios →</a>
-  </div>
-</section>
+<!-- ═══════════════ HOME ═══════════════ -->
+<div id="home-page">
+  <section class="hero">
+    <div class="hero-badge">
+      <div class="dot-pulse" style="width:6px;height:6px;"></div>
+      Asunción, Paraguay — Desde 2002
+    </div>
+    <h1>Tecnología para<br><span class="hl-blue">cada necesidad</span></h1>
+    <p>Soluciones IT y equipos médicos de diagnóstico. Elegí el área en la que necesitás asistencia.</p>
 
-<!-- STATS -->
-<div class="stats">
-  <div class="stat">
-    <span class="stat-number">23+</span>
-    <span class="stat-label">Años en el rubro</span>
-  </div>
-  <div class="stat">
-    <span class="stat-number">500+</span>
-    <span class="stat-label">Equipos reparados</span>
-  </div>
-  <div class="stat">
-    <span class="stat-number">24h</span>
-    <span class="stat-label">Tiempo de respuesta</span>
-  </div>
-  <div class="stat">
-    <span class="stat-number">100%</span>
-    <span class="stat-label">Clientes satisfechos</span>
-  </div>
+    <div class="split">
+
+      <!-- IT CARD -->
+      <div class="split-card it" onclick="showPage('it')">
+        <span class="card-tag">Informática & Redes</span>
+        <div class="card-icon">🖥️</div>
+        <div class="card-title">Fermadi<br>Informática</div>
+        <p class="card-desc">Servidores, redes, CCTV, reparación de PCs y notebooks, cableado estructurado y recuperación de datos.</p>
+        <div class="card-services">
+          <span class="svc-pill">Servidores</span>
+          <span class="svc-pill">Redes LAN/WiFi</span>
+          <span class="svc-pill">CCTV</span>
+          <span class="svc-pill">PCs & Notebooks</span>
+          <span class="svc-pill">Cableado</span>
+          <span class="svc-pill">Recuperación datos</span>
+        </div>
+        <div class="card-cta">Ver servicios <span class="arrow">→</span></div>
+      </div>
+
+      <!-- MEDICAL CARD -->
+      <div class="split-card med" onclick="showPage('med')">
+        <span class="card-tag">Equipos Médicos</span>
+        <div class="card-icon">🩻</div>
+        <div class="card-title">Fermadi<br>Médica</div>
+        <p class="card-desc">Instalación y mantenimiento de equipos de diagnóstico por imagen para clínicas humanas y veterinarias.</p>
+        <div class="card-services">
+          <span class="svc-pill">Carestream</span>
+          <span class="svc-pill">Rayos X</span>
+          <span class="svc-pill">VITA CR</span>
+          <span class="svc-pill">Ecógrafo</span>
+          <span class="svc-pill">Mamógrafo</span>
+          <span class="svc-pill">Veterinario</span>
+        </div>
+        <div class="card-cta">Ver servicios <span class="arrow">→</span></div>
+      </div>
+
+    </div>
+  </section>
 </div>
 
-<!-- SERVICES -->
-<section class="services" id="servicios">
-  <div class="section-header">
-    <span class="section-tag">// servicios</span>
-    <h2>Soluciones Técnicas Integrales</h2>
-    <p>Cobertura completa en tecnología informática, redes, seguridad electrónica y equipos de diagnóstico.</p>
+<!-- ═══════════════ IT PAGE ═══════════════ -->
+<div id="it-page" class="page">
+
+  <div class="page-hero">
+    <button class="back-btn" onclick="showHome()">← Volver</button>
+    <div class="page-badge it">// Informática & Redes</div>
+    <h1>Soluciones IT<br><span class="hl-blue">para empresas y hogares</span></h1>
+    <p>Reparación, instalación y mantenimiento de infraestructura tecnológica. Respuesta rápida en Asunción y área metropolitana.</p>
+    <a href="https://wa.me/595994158411?text=Hola%20Fermadi%2C%20necesito%20asistencia%20informática" class="btn-wa" target="_blank" style="display:inline-flex;">
+      <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Consultar ahora
+    </a>
   </div>
-  <div class="services-grid">
 
-    <div class="service-card">
-      <div class="service-icon" style="background:rgba(0,102,255,0.15);">🖥️</div>
-      <h3>Reparación de PCs y Notebooks</h3>
-      <p>Diagnóstico y reparación de equipos de escritorio y portátiles. Cambio de componentes, limpieza, recuperación de datos y actualización de hardware.</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-icon" style="background:rgba(0,200,255,0.12);">🗄️</div>
-      <h3>Servidores & Infraestructura</h3>
-      <p>Instalación, configuración y mantenimiento de servidores. Virtualización, backup, RAID y monitoreo de rendimiento 24/7.</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-icon" style="background:rgba(0,229,160,0.12);">🔌</div>
-      <h3>Cableado Estructurado</h3>
-      <p>Diseño e instalación de redes LAN Cat5e/Cat6/Cat6A. Certificación de cableado, patch panels y administración de rack.</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-icon" style="background:rgba(255,100,50,0.12);">📡</div>
-      <h3>Redes & Conectividad</h3>
-      <p>Configuración de routers, switches, access points y VPNs. Redes corporativas seguras y WiFi empresarial de alta cobertura.</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-icon" style="background:rgba(150,80,255,0.12);">📷</div>
-      <h3>CCTV & Seguridad Electrónica</h3>
-      <p>Instalación de cámaras IP y analógicas, DVR/NVR, acceso remoto y configuración de alertas. Sistemas Hikvision, Dahua y más.</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-icon" style="background:rgba(255,200,0,0.12);">💾</div>
-      <h3>Recuperación de Datos</h3>
-      <p>Recuperación de archivos en discos dañados, SSDs, pendrives y tarjetas SD. Servicio de emergencia disponible.</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-icon" style="background:rgba(0,200,255,0.12);">⚙️</div>
-      <h3>Instalación de Software</h3>
-      <p>Windows, Linux, drivers, sistemas de gestión. Instalación y configuración de software especializado para clínicas y empresas.</p>
-    </div>
-
-    <div class="service-card">
-      <div class="service-icon" style="background:rgba(0,229,160,0.12);">🔧</div>
-      <h3>Mantenimiento Preventivo</h3>
-      <p>Planes de mantenimiento periódico para empresas. Revisión de infraestructura, limpieza y actualización de sistemas operativos.</p>
-    </div>
-
+  <div class="stats-row">
+    <div class="stat"><span class="stat-n">23+</span><span class="stat-l">Años en el rubro</span></div>
+    <div class="stat"><span class="stat-n">500+</span><span class="stat-l">Equipos reparados</span></div>
+    <div class="stat"><span class="stat-n">24h</span><span class="stat-l">Tiempo de respuesta</span></div>
   </div>
-</section>
 
-<!-- MEDICAL SECTION -->
-<section class="medical" id="medico">
-  <div class="medical-inner">
-    <div class="medical-visual">
-      <div class="medical-badge-grid">
-        <div class="med-badge">
-          <div class="med-badge-icon">🩻</div>
-          <div class="med-badge-name">Rayos X</div>
-          <div class="med-badge-sub">Humano · Veterinario</div>
-        </div>
-        <div class="med-badge">
-          <div class="med-badge-icon">🔬</div>
-          <div class="med-badge-name">Mamógrafo</div>
-          <div class="med-badge-sub">Mantenimiento</div>
-        </div>
-        <div class="med-badge">
-          <div class="med-badge-icon">📟</div>
-          <div class="med-badge-name">Ecógrafo</div>
-          <div class="med-badge-sub">Diagnóstico por imagen</div>
-        </div>
-        <div class="med-badge">
-          <div class="med-badge-icon">💿</div>
-          <div class="med-badge-name">Carestream</div>
-          <div class="med-badge-sub">ImageSuite · VetRIS</div>
-        </div>
-        <div class="med-badge">
-          <div class="med-badge-icon">🏥</div>
-          <div class="med-badge-name">VITA CR</div>
-          <div class="med-badge-sub">Radioluminiscencia</div>
-        </div>
-        <div class="med-badge">
-          <div class="med-badge-icon">🐾</div>
-          <div class="med-badge-name">Veterinario</div>
-          <div class="med-badge-sub">Instalación completa</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="medical-content">
-      <span class="section-tag">// equipos médicos</span>
-      <h2>Especialistas en<br><span class="highlight">Diagnóstico por Imagen</span></h2>
-      <p>Brindamos instalación, configuración y mantenimiento de equipos médicos y veterinarios de diagnóstico por imagen. Desde la configuración del sistema hasta la capacitación del personal.</p>
-      <ul class="feature-list">
-        <li>Instalación de Carestream ImageSuite (humano y veterinario)</li>
-        <li>Configuración de sistemas VITA CR</li>
-        <li>Integración de equipos de Rayos X digitales</li>
-        <li>Mantenimiento preventivo y correctivo de ecógrafos</li>
-        <li>Soporte para mamógrafos y equipos de radiología</li>
-        <li>Capacitación al personal de salud</li>
-        <li>Servicio de garantía post-instalación</li>
-      </ul>
+  <div class="services-section">
+    <span class="section-label it">// servicios informáticos</span>
+    <div class="grid-3">
+      <div class="svc-card it"><span class="svc-icon">🖥️</span><h3>PCs & Notebooks</h3><p>Diagnóstico y reparación de equipos de escritorio y portátiles. Cambio de componentes, limpieza y actualización de hardware.</p></div>
+      <div class="svc-card it"><span class="svc-icon">🗄️</span><h3>Servidores</h3><p>Instalación, configuración y mantenimiento de servidores. Virtualización, backup, RAID y monitoreo de rendimiento.</p></div>
+      <div class="svc-card it"><span class="svc-icon">🔌</span><h3>Cableado Estructurado</h3><p>Diseño e instalación de redes LAN Cat5e/Cat6/Cat6A. Certificación, patch panels y administración de rack.</p></div>
+      <div class="svc-card it"><span class="svc-icon">📡</span><h3>Redes & WiFi</h3><p>Configuración de routers, switches, access points y VPNs. Redes corporativas seguras y WiFi empresarial.</p></div>
+      <div class="svc-card it"><span class="svc-icon">📷</span><h3>CCTV & Seguridad</h3><p>Instalación de cámaras IP y analógicas, DVR/NVR, acceso remoto y alertas. Hikvision, Dahua y más.</p></div>
+      <div class="svc-card it"><span class="svc-icon">💾</span><h3>Recuperación de Datos</h3><p>Recuperación de archivos en discos dañados, SSDs, pendrives y tarjetas SD. Servicio de emergencia disponible.</p></div>
+      <div class="svc-card it"><span class="svc-icon">⚙️</span><h3>Instalación de Software</h3><p>Windows, Linux, drivers y sistemas de gestión. Configuración de software especializado para empresas.</p></div>
+      <div class="svc-card it"><span class="svc-icon">🔧</span><h3>Mantenimiento Preventivo</h3><p>Planes periódicos para empresas. Revisión de infraestructura, limpieza y actualización de sistemas.</p></div>
     </div>
   </div>
-</section>
 
-<!-- ABOUT -->
-<section class="about" id="nosotros-about">
-  <div class="about-inner">
-    <div class="about-content">
-      <span class="section-tag">// quiénes somos</span>
-      <h2>Más de dos décadas<br><span class="highlight">recorriendo el mundo</span></h2>
-      <p class="about-lead">Profesional informático desde 2002, con experiencia en redes, servidores y equipos médicos en Paraguay y el mundo.</p>
-      <p class="about-body">Participé en la implementación del sistema VAR (Video Assistant Referee) en competencias de fútbol en Latinoamérica, Asia y Europa — gestionando infraestructura de redes y servidores en entornos de alta exigencia. Hoy pongo toda esa experiencia al servicio de empresas, clínicas y particulares en Paraguay.</p>
-      <div class="about-tags">
+  <div class="about-strip">
+    <div class="about-strip-text">
+      <h2>Experiencia que habla por sí sola</h2>
+      <p>Profesional informático desde 2002. Participé en la implementación del sistema VAR (Video Assistant Referee) en competencias de fútbol en Latinoamérica, Asia y Europa — gestionando infraestructura de redes y servidores en entornos de alta exigencia. Hoy pongo toda esa experiencia al servicio de Paraguay.</p>
+      <div class="about-strip-tags">
         <span class="tag">🌍 Latinoamérica</span>
         <span class="tag">🌏 Asia</span>
         <span class="tag">🌐 Europa</span>
-        <span class="tag">⚽ VAR — Videoarbitraje</span>
-        <span class="tag">🏥 Equipos Médicos</span>
+        <span class="tag">⚽ VAR 2020–2025</span>
         <span class="tag">🔧 Redes desde 2002</span>
       </div>
     </div>
-    <div class="about-timeline">
-      <div class="timeline-item">
-        <div class="timeline-dot"></div>
-        <div class="timeline-content">
-          <span class="timeline-year">2002</span>
-          <h4>Inicio en Redes & Telecomunicaciones</h4>
-          <p>Primeros pasos en infraestructura de redes en Paraguay. Comienzo de una trayectoria que marcaría más de dos décadas en el sector.</p>
-        </div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-dot"></div>
-        <div class="timeline-content">
-          <span class="timeline-year">2005 – 2015</span>
-          <h4>Expansión Internacional</h4>
-          <p>Implementación de proyectos de tecnología VAR en Latinoamérica, Asia y Europa. Gestión de servidores, redes y sistemas en entornos multinacionales.</p>
-        </div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-dot"></div>
-        <div class="timeline-content">
-          <span class="timeline-year">2015 – 2020</span>
-          <h4>Equipos Médicos & CCTV</h4>
-          <p>Especialización en instalación y mantenimiento de equipos de diagnóstico: Carestream ImageSuite, VITA CR, ecógrafos y sistemas de radiología.</p>
-        </div>
-      </div>
-      <div class="timeline-item active">
-        <div class="timeline-dot"></div>
-        <div class="timeline-content">
-          <span class="timeline-year">2020 – Hoy</span>
-          <h4>Fermadi Soluciones</h4>
-          <p>Ofreciendo soluciones tecnológicas integrales en Paraguay. Jefe de operaciones con foco en IT, telecomunicaciones y equipos médicos especializados.</p>
-        </div>
-      </div>
-    </div>
   </div>
-</section>
 
-<!-- WHY US -->
-<section class="why" id="nosotros">
-  <div class="section-header">
-    <span class="section-tag">// ¿por qué fermadi?</span>
-    <h2>Comprometidos con la Excelencia</h2>
-    <p>Más de una década de experiencia en tecnología e infraestructura en Paraguay.</p>
-  </div>
-  <div class="why-grid">
-    <div class="why-card">
-      <span class="why-number">01 /</span>
-      <h3>Experiencia Comprobada</h3>
-      <p>Trayectoria en empresas líderes de telecomunicaciones como Tigo, Personal y Telecel en Paraguay.</p>
-    </div>
-    <div class="why-card">
-      <span class="why-number">02 /</span>
-      <h3>Especialización Médica</h3>
-      <p>Conocimiento técnico certificado en equipos de diagnóstico por imagen para clínicas y veterinarias.</p>
-    </div>
-    <div class="why-card">
-      <span class="why-number">03 /</span>
-      <h3>Respuesta Rápida</h3>
-      <p>Atención de urgencias y diagnóstico remoto. Disponibilidad para minimizar el tiempo de inactividad.</p>
-    </div>
-    <div class="why-card">
-      <span class="why-number">04 /</span>
-      <h3>Solución Integral</h3>
-      <p>Un solo proveedor para IT, redes, seguridad y equipos médicos. Simplificamos tu gestión tecnológica.</p>
+  <div class="contact-section" id="contacto-it">
+    <div class="contact-box">
+      <h2>¿Necesitás asistencia IT?</h2>
+      <p>Escribinos por WhatsApp o email. Coordinamos una visita técnica en el menor tiempo posible.</p>
+      <div class="contact-btns">
+        <a href="https://wa.me/595994158411?text=Hola%20Fermadi%2C%20necesito%20asistencia%20informática" class="btn-wa" target="_blank">
+          <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp
+        </a>
+        <a href="mailto:fermadi@gmail.com" class="btn-email">✉️ fermadi@gmail.com</a>
+      </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- CONTACT -->
-<section class="contact" id="contacto">
-  <div class="contact-inner">
-    <div class="hero-badge" style="margin-bottom:1.5rem;">
-      <div class="dot" style="width:6px;height:6px;background:var(--green);border-radius:50%;"></div>
-      Disponible ahora
-    </div>
-    <h2>¿Necesitás asistencia?</h2>
-    <p>Escribinos por WhatsApp o email. Respondemos en el menor tiempo posible y coordinamos una visita técnica.</p>
-    <div class="contact-options">
-      <a href="https://wa.me/595994158411?text=Hola%20Fermadi%2C%20necesito%20asistencia%20técnica" class="contact-link whatsapp" target="_blank">
-        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        WhatsApp
-      </a>
-      <a href="mailto:fermadi@gmail.com" class="contact-link email">
-        ✉️ fermadi@gmail.com
-      </a>
-    </div>
-    <div class="contact-info">
-      <span class="contact-info-item">
-        <div class="dot" style="width:6px;height:6px;border-radius:50%;background:var(--accent);"></div>
-        Asunción, Paraguay
-      </span>
-      <span class="contact-info-item">
-        <div class="dot" style="width:6px;height:6px;border-radius:50%;background:var(--accent);"></div>
-        Cobertura nacional
-      </span>
+<!-- ═══════════════ MEDICAL PAGE ═══════════════ -->
+<div id="med-page" class="page">
+
+  <div class="page-hero">
+    <button class="back-btn" onclick="showHome()">← Volver</button>
+    <div class="page-badge med">// Equipos Médicos</div>
+    <h1>Diagnóstico por imagen<br><span class="hl-green">humano & veterinario</span></h1>
+    <p>Instalación, configuración y mantenimiento de equipos de diagnóstico por imagen. Servicio para clínicas humanas y veterinarias en todo Paraguay.</p>
+    <a href="https://wa.me/595994158411?text=Hola%20Fermadi%2C%20necesito%20asistencia%20con%20equipos%20médicos" class="btn-wa" target="_blank" style="display:inline-flex;">
+      <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Consultar ahora
+    </a>
+  </div>
+
+  <div class="services-section">
+    <span class="section-label med">// equipos & servicios</span>
+    <div class="grid-3">
+      <div class="svc-card med"><span class="svc-icon">💿</span><h3>Carestream ImageSuite</h3><p>Instalación y configuración del software Carestream para clínicas humanas y veterinarias. Activación de licencias y soporte post-instalación.</p></div>
+      <div class="svc-card med"><span class="svc-icon">🩻</span><h3>Rayos X Digital</h3><p>Integración de equipos de radiología digital. Configuración de workstations, calibración y capacitación del personal.</p></div>
+      <div class="svc-card med"><span class="svc-icon">🏥</span><h3>VITA CR</h3><p>Instalación y mantenimiento de sistemas de radiografía computada (CR). Configuración de placas y lectores.</p></div>
+      <div class="svc-card med"><span class="svc-icon">📟</span><h3>Ecógrafo</h3><p>Mantenimiento preventivo y correctivo de equipos de ultrasonido. Diagnóstico de fallas y reemplazo de componentes.</p></div>
+      <div class="svc-card med"><span class="svc-icon">🔬</span><h3>Mamógrafo</h3><p>Servicio técnico especializado en equipos de mamografía. Revisión periódica y mantenimiento de calidad de imagen.</p></div>
+      <div class="svc-card med"><span class="svc-icon">🐾</span><h3>Veterinario</h3><p>Instalación completa de sistemas de diagnóstico para clínicas veterinarias: Carestream VetRIS, rayos X y ecógrafo.</p></div>
     </div>
   </div>
-</section>
+
+  <div class="about-strip">
+    <div class="about-strip-text">
+      <h2>Instalaciones en todo el país</h2>
+      <p>Con más de 23 años de experiencia técnica, ofrecemos instalación completa de sistemas de diagnóstico por imagen — desde la puesta en marcha del equipo hasta la capacitación del personal de salud. Trabajamos con clínicas humanas y veterinarias en Paraguay.</p>
+      <div class="about-strip-tags">
+        <span class="tag">🏥 Clínicas humanas</span>
+        <span class="tag">🐾 Veterinarias</span>
+        <span class="tag">📍 Todo Paraguay</span>
+        <span class="tag">🎓 Capacitación incluida</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-section" id="contacto-med">
+    <div class="contact-box">
+      <h2>¿Necesitás instalar un equipo?</h2>
+      <p>Consultanos sin compromiso. Coordinamos visita técnica y presupuesto personalizado.</p>
+      <div class="contact-btns">
+        <a href="https://wa.me/595994158411?text=Hola%20Fermadi%2C%20necesito%20asistencia%20con%20equipos%20médicos" class="btn-wa" target="_blank">
+          <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp
+        </a>
+        <a href="mailto:fermadi@gmail.com" class="btn-email">✉️ fermadi@gmail.com</a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- FOOTER -->
 <footer>
   <div class="footer-logo"><span>fermadi</span> Soluciones</div>
-  <p>© 2025 Fermadi Soluciones. Todos los derechos reservados.</p>
-  <ul class="footer-links">
-    <li><a href="#servicios">Servicios</a></li>
-    <li><a href="#medico">Médico</a></li>
-    <li><a href="#contacto">Contacto</a></li>
-  </ul>
+  <p>© 2025 Fermadi Soluciones — Asunción, Paraguay</p>
 </footer>
 
 <script>
-  // Smooth scroll for anchor links
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      e.preventDefault();
-      const target = document.querySelector(a.getAttribute('href'));
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  });
+function showHome() {
+  document.getElementById('home-page').style.display = '';
+  document.getElementById('it-page').classList.remove('active');
+  document.getElementById('med-page').classList.remove('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-  // Intersection observer for fade-in
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
-      }
-    });
-  }, { threshold: 0.1 });
+function showPage(type) {
+  document.getElementById('home-page').style.display = 'none';
+  document.getElementById('it-page').classList.remove('active');
+  document.getElementById('med-page').classList.remove('active');
+  document.getElementById(type + '-page').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'instant' });
 
-  document.querySelectorAll('.service-card, .why-card, .med-badge, .stat').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(24px)';
-    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-    observer.observe(el);
-  });
+  setTimeout(() => {
+    document.querySelectorAll('#' + type + '-page .svc-card').forEach((el, i) => {
+      setTimeout(() => el.classList.add('visible'), i * 60);
+    });
+  }, 100);
+}
 </script>
 </body>
 </html>
