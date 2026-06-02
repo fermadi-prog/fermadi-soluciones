@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fermadi — Portal de Servicios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0a0f1e;
+  --accent: #00c8ff;
+  --accent2: #0066ff;
+  --green: #00e5a0;
+  --amber: #ffb800;
+  --purple: #a855f7;
+  --text: #e8eaf6;
+  --muted: #8892b0;
+  --border: rgba(0,200,255,0.15);
+  --card: rgba(21,29,53,0.85);
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Sora', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,200,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,200,255,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none; z-index: 0;
+}
+.orb {
+  position: fixed; border-radius: 50%;
+  filter: blur(90px); pointer-events: none; z-index: 0;
+}
+.orb1 { width: 600px; height: 600px; background: radial-gradient(circle, #0033aa, transparent 70%); top: -250px; left: -200px; opacity: 0.35; }
+.orb2 { width: 400px; height: 400px; background: radial-gradient(circle, #00e5a0, transparent 70%); bottom: 0; right: -100px; opacity: 0.2; }
+.orb3 { width: 300px; height: 300px; background: radial-gradient(circle, #a855f7, transparent 70%); top: 50%; left: 60%; opacity: 0.15; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 5%;
+  background: rgba(10,15,30,0.88);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none; font-size: 1.2rem; font-weight: 700; color: var(--text);
+}
+.nav-logo span { color: var(--accent); font-family: 'DM Mono', monospace; }
+.dot-pulse {
+  width: 8px; height: 8px; background: var(--accent); border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(0,200,255,0.5); }
+  50% { box-shadow: 0 0 0 7px rgba(0,200,255,0); }
+}
+.nav-right { font-size: 0.8rem; color: var(--muted); font-family: 'DM Mono', monospace; }
+
+/* HERO */
+.hero {
+  position: relative; z-index: 1;
+  padding: 9rem 5% 3rem;
+  text-align: center;
+}
+@keyframes fadeDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeUp { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(0,200,255,0.08); border: 1px solid rgba(0,200,255,0.3);
+  color: var(--accent); font-family: 'DM Mono', monospace;
+  font-size: 0.72rem; padding: 0.38rem 1rem; border-radius: 100px;
+  letter-spacing: 0.09em; text-transform: uppercase;
+  margin-bottom: 1.75rem;
+  animation: fadeDown 0.7s ease both;
+}
+.hero h1 {
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: 700; line-height: 1.1; margin-bottom: 1rem;
+  animation: fadeUp 0.7s 0.15s ease both;
+}
+.hl { background: linear-gradient(135deg, var(--accent2), var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.hero p {
+  font-size: 1rem; color: var(--muted); font-weight: 300;
+  max-width: 500px; margin: 0 auto 3.5rem;
+  animation: fadeUp 0.7s 0.3s ease both;
+}
+
+/* MODULES GRID */
+.modules {
+  position: relative; z-index: 1;
+  max-width: 1100px; margin: 0 auto;
+  padding: 0 5% 6rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.25rem;
+}
+
+.module {
+  background: var(--card);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  padding: 2rem;
+  text-decoration: none;
+  display: flex; flex-direction: column; gap: 1rem;
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+  opacity: 0; transform: translateY(24px);
+  animation: fadeUp 0.6s ease forwards;
+  position: relative;
+  overflow: hidden;
+}
+
+.module:nth-child(1) { animation-delay: 0.4s; }
+.module:nth-child(2) { animation-delay: 0.5s; }
+.module:nth-child(3) { animation-delay: 0.6s; }
+.module:nth-child(4) { animation-delay: 0.7s; }
+.module:nth-child(5) { animation-delay: 0.8s; }
+.module:nth-child(6) { animation-delay: 0.9s; }
+
+.module.active:hover { transform: translateY(-5px); }
+
+/* Color accents per module */
+.module.it { --mc: #00c8ff; --mg: rgba(0,102,255,0.12); }
+.module.med { --mc: #00e5a0; --mg: rgba(0,229,160,0.1); }
+.module.gestion { --mc: #ffb800; --mg: rgba(255,184,0,0.1); }
+.module.presupuestos { --mc: #a855f7; --mg: rgba(168,85,247,0.1); }
+.module.crm { --mc: #ff6b6b; --mg: rgba(255,107,107,0.1); }
+.module.soporte { --mc: #00c8ff; --mg: rgba(0,200,255,0.08); }
+
+.module::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--mc);
+  opacity: 0; transition: opacity 0.3s;
+}
+.module.active:hover::before { opacity: 1; }
+
+.module.active:hover {
+  border-color: var(--mc);
+  box-shadow: 0 12px 40px color-mix(in srgb, var(--mc) 20%, transparent);
+}
+
+.module-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+}
+
+.module-icon {
+  width: 52px; height: 52px; border-radius: 12px;
+  background: var(--mg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem;
+  border: 1px solid color-mix(in srgb, var(--mc) 25%, transparent);
+}
+
+.module-status {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  padding: 0.28rem 0.75rem;
+  border-radius: 100px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.status-live {
+  background: rgba(0,229,160,0.1);
+  border: 1px solid rgba(0,229,160,0.35);
+  color: #00e5a0;
+}
+
+.status-soon {
+  background: rgba(255,184,0,0.1);
+  border: 1px solid rgba(255,184,0,0.3);
+  color: #ffb800;
+}
+
+.module-name {
+  font-size: 1.2rem; font-weight: 700; color: var(--text);
+}
+
+.module-sub {
+  font-size: 0.78rem;
+  color: var(--mc);
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.05em;
+  margin-top: -0.5rem;
+}
+
+.module-desc {
+  font-size: 0.855rem;
+  color: var(--muted);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.module-pills {
+  display: flex; flex-wrap: wrap; gap: 0.4rem;
+}
+
+.pill {
+  font-size: 0.7rem;
+  padding: 0.22rem 0.65rem;
+  border-radius: 100px;
+  background: color-mix(in srgb, var(--mc) 10%, transparent);
+  color: var(--mc);
+  border: 1px solid color-mix(in srgb, var(--mc) 20%, transparent);
+}
+
+.module-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: auto; padding-top: 0.75rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.module-url {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.module-arrow {
+  font-size: 0.85rem;
+  color: var(--mc);
+  transition: transform 0.2s;
+  opacity: 0.6;
+}
+
+.module.active:hover .module-arrow { transform: translateX(4px); opacity: 1; }
+
+/* COMING SOON overlay */
+.module.coming { cursor: default; }
+.module.coming .module-desc { opacity: 0.7; }
+
+/* STATS */
+.stats {
+  position: relative; z-index: 1;
+  display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;
+  padding: 2.5rem 5%;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: rgba(10,15,30,0.5);
+  margin-bottom: 2rem;
+}
+.stat { text-align: center; }
+.stat-n { font-size: 2rem; font-weight: 700; font-family: 'DM Mono', monospace; color: var(--accent); display: block; }
+.stat-l { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* FOOTER */
+footer {
+  position: relative; z-index: 1;
+  padding: 1.5rem 5%;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+  background: rgba(10,15,30,0.7);
+}
+.footer-logo { font-weight: 700; font-size: 0.95rem; }
+.footer-logo span { color: var(--accent); }
+footer p { font-size: 0.76rem; color: var(--muted); }
+.footer-contact { display: flex; gap: 1.25rem; }
+.footer-contact a { font-size: 0.76rem; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-contact a:hover { color: var(--accent); }
+
+@media (max-width: 680px) {
+  .modules { grid-template-columns: 1fr; }
+  footer { flex-direction: column; text-align: center; }
+  .footer-contact { justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="dot-pulse"></div>
+    <span>fermadi</span> Soluciones
+  </a>
+  <div class="nav-right">Asunción, Paraguay</div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">
+    <div class="dot-pulse" style="width:6px;height:6px;"></div>
+    Portal de Servicios — Desde 2002
+  </div>
+  <h1>Bienvenido a<br><span class="hl">Fermadi Soluciones</span></h1>
+  <p>Seleccioná el área en la que necesitás asistencia o accedé a las herramientas de gestión.</p>
+</div>
+
+<div class="stats">
+  <div class="stat"><span class="stat-n">23+</span><span class="stat-l">Años de experiencia</span></div>
+  <div class="stat"><span class="stat-n">2</span><span class="stat-l">Áreas de servicio</span></div>
+  <div class="stat"><span class="stat-n">500+</span><span class="stat-l">Equipos atendidos</span></div>
+  <div class="stat"><span class="stat-n">24h</span><span class="stat-l">Tiempo de respuesta</span></div>
+</div>
+
+<div class="modules">
+
+  <!-- IT — LIVE -->
+  <a href="https://it.fermadi.com.py" class="module it active">
+    <div class="module-header">
+      <div class="module-icon">🖥️</div>
+      <span class="module-status status-live">● En vivo</span>
+    </div>
+    <div class="module-name">Fermadi IT</div>
+    <div class="module-sub">// informática & redes</div>
+    <p class="module-desc">Reparación de PCs y servidores, cableado estructurado, redes, CCTV y recuperación de datos.</p>
+    <div class="module-pills">
+      <span class="pill">Servidores</span>
+      <span class="pill">Redes LAN</span>
+      <span class="pill">CCTV</span>
+      <span class="pill">PCs & Notebooks</span>
+    </div>
+    <div class="module-footer">
+      <span class="module-url">it.fermadi.com.py</span>
+      <span class="module-arrow">→</span>
+    </div>
+  </a>
+
+  <!-- MEDICAL — LIVE -->
+  <a href="https://med.fermadi.com.py" class="module med active">
+    <div class="module-header">
+      <div class="module-icon">🩻</div>
+      <span class="module-status status-live">● En vivo</span>
+    </div>
+    <div class="module-name">Fermadi Equipos Médicos</div>
+    <div class="module-sub">// diagnóstico por imagen</div>
+    <p class="module-desc">Instalación y mantenimiento de equipos médicos: Carestream, VITA CR, Rayos X, Ecógrafo y Mamógrafo.</p>
+    <div class="module-pills">
+      <span class="pill">Carestream</span>
+      <span class="pill">Rayos X</span>
+      <span class="pill">VITA CR</span>
+      <span class="pill">Veterinario</span>
+    </div>
+    <div class="module-footer">
+      <span class="module-url">med.fermadi.com.py</span>
+      <span class="module-arrow">→</span>
+    </div>
+  </a>
+
+  <!-- GESTION — COMING SOON -->
+  <div class="module gestion coming">
+    <div class="module-header">
+      <div class="module-icon">📊</div>
+      <span class="module-status status-soon">Próximamente</span>
+    </div>
+    <div class="module-name">Fermadi Gestión</div>
+    <div class="module-sub">// administración interna</div>
+    <p class="module-desc">App de gestión de clientes, órdenes de trabajo, inventario y seguimiento de servicios técnicos.</p>
+    <div class="module-pills">
+      <span class="pill">Clientes</span>
+      <span class="pill">Órdenes de trabajo</span>
+      <span class="pill">Inventario</span>
+    </div>
+    <div class="module-footer">
+      <span class="module-url">gestion.fermadi.com.py</span>
+      <span class="module-arrow" style="opacity:0.3;">→</span>
+    </div>
+  </div>
+
+  <!-- PRESUPUESTOS — COMING SOON -->
+  <div class="module presupuestos coming">
+    <div class="module-header">
+      <div class="module-icon">📋</div>
+      <span class="module-status status-soon">Próximamente</span>
+    </div>
+    <div class="module-name">Fermadi Presupuestos</div>
+    <div class="module-sub">// cotizaciones & propuestas</div>
+    <p class="module-desc">Generación de presupuestos y propuestas técnicas para clientes. Envío automático por WhatsApp y email.</p>
+    <div class="module-pills">
+      <span class="pill">Cotizaciones</span>
+      <span class="pill">PDF automático</span>
+      <span class="pill">WhatsApp</span>
+    </div>
+    <div class="module-footer">
+      <span class="module-url">presupuestos.fermadi.com.py</span>
+      <span class="module-arrow" style="opacity:0.3;">→</span>
+    </div>
+  </div>
+
+  <!-- CRM — COMING SOON -->
+  <div class="module crm coming">
+    <div class="module-header">
+      <div class="module-icon">👥</div>
+      <span class="module-status status-soon">Próximamente</span>
+    </div>
+    <div class="module-name">Fermadi CRM</div>
+    <div class="module-sub">// gestión de clientes</div>
+    <p class="module-desc">Base de datos de clientes, historial de servicios, recordatorios de mantenimiento y seguimiento comercial.</p>
+    <div class="module-pills">
+      <span class="pill">Historial</span>
+      <span class="pill">Recordatorios</span>
+      <span class="pill">Seguimiento</span>
+    </div>
+    <div class="module-footer">
+      <span class="module-url">crm.fermadi.com.py</span>
+      <span class="module-arrow" style="opacity:0.3;">→</span>
+    </div>
+  </div>
+
+  <!-- SOPORTE — COMING SOON -->
+  <div class="module soporte coming">
+    <div class="module-header">
+      <div class="module-icon">🎧</div>
+      <span class="module-status status-soon">Próximamente</span>
+    </div>
+    <div class="module-name">Fermadi Soporte</div>
+    <div class="module-sub">// tickets & asistencia remota</div>
+    <p class="module-desc">Portal de soporte técnico con sistema de tickets, seguimiento de solicitudes y asistencia remota.</p>
+    <div class="module-pills">
+      <span class="pill">Tickets</span>
+      <span class="pill">Soporte remoto</span>
+      <span class="pill">Estado en tiempo real</span>
+    </div>
+    <div class="module-footer">
+      <span class="module-url">soporte.fermadi.com.py</span>
+      <span class="module-arrow" style="opacity:0.3;">→</span>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-logo"><span>fermadi</span> Soluciones</div>
+  <p>© 2025 Fermadi Soluciones — Asunción, Paraguay</p>
+  <div class="footer-contact">
+    <a href="https://wa.me/595994158411">WhatsApp</a>
+    <a href="mailto:fermadi@gmail.com">fermadi@gmail.com</a>
+  </div>
+</footer>
+
+</body>
+</html>
